@@ -1,7 +1,9 @@
-import numpy as np
 import abc
 from copy import deepcopy
+
+import numpy as np
 from sklearn.decomposition.base import _BasePCA
+from sklearn.feature_extraction.image import reconstruct_from_patches_2d, extract_patches_2d
 
 
 class TransformerInterface(abc.ABCMeta):
@@ -19,18 +21,26 @@ class TransformerInterface(abc.ABCMeta):
 
 
 class DomainAdapter:
-    def __init__(self, transformer: TransformerInterface, ref_img: np.ndarray):
+    def __init__(self, transformer: TransformerInterface, ref_img: np.ndarray, kernel_size=1):
+        self.kernel_size = kernel_size
         self.source_transformer = deepcopy(transformer)
         self.target_transformer = transformer
         self.target_transformer.fit(self.flatten(ref_img))
 
-    @staticmethod
-    def flatten(img):
-        return img.reshape(-1, 3) / 255.
+    def flatten(self, img):
+        img = img.astype('float32') / 255.
+        if self.kernel_size == 1:
+            return img.reshape(-1, 3)
+        patches = extract_patches_2d(img, (2, 2))
+        pixels = patches.reshape(len(patches), -1)
+        return pixels
 
-    @staticmethod
-    def reconstruct(pixels, h, w):
-        return (np.clip(pixels, 0, 1).reshape(h, w, -1) * 255).astype('uint8')
+    def reconstruct(self, pixels, h, w):
+        pixels = (np.clip(pixels, 0, 1) * 255).astype('uint8')
+        if self.kernel_size == 1:
+            return pixels.reshape(h, w, 3)
+        patches = pixels.reshape(-1, self.kernel_size, self.kernel_size, 3)
+        return reconstruct_from_patches_2d(patches, (h, w, 3))
 
     @staticmethod
     def _pca_sign(x: _BasePCA):
