@@ -24,11 +24,6 @@ class DomainAdapter:
         self.target_transformer = transformer
         self.target_transformer.fit(self.flatten(ref_img))
 
-        if isinstance(self.target_transformer, _BasePCA):
-            # dirty hack to make sure colors are not inversed
-            if np.trace(self.target_transformer.components_) < 0:
-                self.target_transformer.components_ *= -1
-
     @staticmethod
     def flatten(img):
         return img.reshape(-1, 3) / 255.

@@ -23,7 +23,7 @@ cv2.imwrite('../result.png', result)
 ## Example 
 Source image: 
 ![source](source.png)
-Target gamma:
+Target image (style donor):
 ![target](target.png)
 Result with PCA adaptation:
 ![result](result.png)
