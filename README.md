@@ -1,6 +1,7 @@
 # QuDiDA (QUick and DIrty Domain Adaptation)
 
 QuDiDA is a micro library for very naive though quick pixel level image domain adaptation via `scikit-learn` transformers.
+Is assumed to be used as image augmentation technique, while was not tested in public benchmarks. 
 
 ## Installation
 ```
