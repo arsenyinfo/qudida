@@ -7,7 +7,7 @@ from setuptools import find_packages, setup
 NAME = "qudida"
 DESCRIPTION = "QUick and DIrty Domain Adaptation"
 URL = "https://github.com/arsenyinfo/qudida"
-REQUIRES_PYTHON = ">=3.6.0"
+REQUIRES_PYTHON = ">=3.5.0"
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
