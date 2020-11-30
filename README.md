@@ -26,5 +26,5 @@ Source image:
 ![source](source.png)
 Target image (style donor):
 ![target](target.png)
-Result with PCA adaptation:
+Result with various adaptations:
 ![result](result.gif)

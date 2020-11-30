@@ -4,7 +4,6 @@ from copy import deepcopy
 import cv2
 import numpy as np
 from sklearn.decomposition.base import _BasePCA
-from sklearn.feature_extraction.image import reconstruct_from_patches_2d, extract_patches_2d
 
 
 class TransformerInterface(abc.ABCMeta):
@@ -25,10 +24,8 @@ class DomainAdapter:
     def __init__(self,
                  transformer: TransformerInterface,
                  ref_img: np.ndarray,
-                 kernel_size=1,
                  color_conversions=(None, None),
                  ):
-        self.kernel_size = kernel_size
         self.color_in, self.color_out = color_conversions
         self.source_transformer = deepcopy(transformer)
         self.target_transformer = transformer
@@ -47,20 +44,11 @@ class DomainAdapter:
     def flatten(self, img):
         img = self.to_colorspace(img)
         img = img.astype('float32') / 255.
-        if self.kernel_size == 1:
-            return img.reshape(-1, 3)
-        patches = extract_patches_2d(img, (2, 2))
-        pixels = patches.reshape(len(patches), -1)
-        return pixels
+        return img.reshape(-1, 3)
 
     def reconstruct(self, pixels, h, w):
         pixels = (np.clip(pixels, 0, 1) * 255).astype('uint8')
-        if self.kernel_size == 1:
-            res = pixels.reshape(h, w, 3)
-        else:
-            patches = pixels.reshape(-1, self.kernel_size, self.kernel_size, 3)
-            res = reconstruct_from_patches_2d(patches, (h, w, 3))
-        return self.from_colorspace(res)
+        return self.from_colorspace(pixels.reshape(h, w, 3))
 
     @staticmethod
     def _pca_sign(x: _BasePCA):
