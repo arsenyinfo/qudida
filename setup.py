@@ -20,7 +20,7 @@ def load_requirements(filename):
         return [line for line in lineiter if line and not line.startswith("#")]
     except FileNotFoundError:
         # install from pypi with a minor chance requirements were not updated
-        return ["opencv-python>=4.0.1", "numpy>=0.18.0", "scikit-learn>=0.19.1"]
+        return ["opencv-python>=4.0.1", "numpy>=0.18.0", "scikit-learn>=0.19.1", "typing-extensions"]
 
 
 def load_readme():

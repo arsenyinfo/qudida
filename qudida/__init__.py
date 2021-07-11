@@ -3,21 +3,22 @@ from copy import deepcopy
 
 import cv2
 import numpy as np
-from sklearn.decomposition.base import _BasePCA
+from sklearn.decomposition import PCA
+from typing_extensions import Protocol
 
 
-class TransformerInterface(abc.ABCMeta):
+class TransformerInterface(Protocol):
     @abc.abstractmethod
-    def inverse_transform(self, X):
-        pass
-
-    @abc.abstractmethod
-    def fit(self, X, y=None):
-        pass
+    def inverse_transform(self, X: np.ndarray) -> np.ndarray:
+        ...
 
     @abc.abstractmethod
-    def transform(self, X, y=None):
-        pass
+    def fit(self, X: np.ndarray, y=None):
+        ...
+
+    @abc.abstractmethod
+    def transform(self, X: np.ndarray, y=None) -> np.ndarray:
+        ...
 
 
 class DomainAdapter:
@@ -51,7 +52,7 @@ class DomainAdapter:
         return self.from_colorspace(pixels.reshape(h, w, 3))
 
     @staticmethod
-    def _pca_sign(x: _BasePCA):
+    def _pca_sign(x):
         return np.sign(np.trace(x.components_))
 
     def __call__(self, image: np.ndarray):
@@ -59,9 +60,8 @@ class DomainAdapter:
         pixels = self.flatten(image)
         self.source_transformer.fit(pixels)
 
-        if isinstance(self.target_transformer, _BasePCA):
+        if self.target_transformer.__class__ in (PCA,):
             # dirty hack to make sure colors are not inverted
-            self.source_transformer: _BasePCA  # keep IDE cool
             if self._pca_sign(self.target_transformer) != self._pca_sign(self.source_transformer):
                 self.target_transformer.components_ *= -1
 
