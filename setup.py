@@ -13,10 +13,14 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 
 def load_requirements(filename):
-    with open(os.path.join(PROJECT_ROOT, filename), "r") as f:
-        lineiter = f.read().splitlines()
-
-    return [line for line in lineiter if line and not line.startswith("#")]
+    try:
+        # install from github
+        with open(os.path.join(PROJECT_ROOT, filename), "r") as f:
+            lineiter = f.read().splitlines()
+        return [line for line in lineiter if line and not line.startswith("#")]
+    except FileNotFoundError:
+        # install from pypi with a minor chance requirements were not updated
+        return ["opencv-python>=4.0.1", "numpy>=0.18.0", "scikit-learn>=0.19.1"]
 
 
 def load_readme():
