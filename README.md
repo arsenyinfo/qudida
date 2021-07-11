@@ -5,6 +5,10 @@ Is assumed to be used as image augmentation technique, while was not tested in p
 
 ## Installation
 ```
+pip install qudida
+```
+or
+```
 pip install git+https://github.com/arsenyinfo/qudida
 ```
 
