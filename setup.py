@@ -90,7 +90,7 @@ setup(
     python_requires=REQUIRES_PYTHON,
     url=URL,
     packages=find_packages(exclude=("tests",)),
-    install_requires=choose_requirement(INSTALL_REQUIRES, CHOOSE_INSTALL_REQUIRES),
+    install_requires=get_install_requirements(INSTALL_REQUIRES, CHOOSE_INSTALL_REQUIRES),
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python",
