@@ -1,6 +1,8 @@
 import io
 import os
+import re
 
+from pkg_resources import DistributionNotFound, get_distribution
 from setuptools import find_packages, setup
 
 # Package meta-data.
@@ -10,6 +12,41 @@ URL = "https://github.com/arsenyinfo/qudida"
 REQUIRES_PYTHON = ">=3.5.0"
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+INSTALL_REQUIRES = ["numpy>=0.18.0", "scikit-learn>=0.19.1", "typing-extensions"]
+
+# If none of packages in first installed, install second package
+CHOOSE_INSTALL_REQUIRES = [
+    (
+        ("opencv-python>=4.0.1", "opencv-contrib-python>=4.0.1", "opencv-contrib-python-headless>=4.0.1"),
+        "opencv-python-headless>=4.0.1",
+    )
+]
+
+
+def choose_requirement(mains, secondary):
+    """If some version version of main requirement installed, return main,
+    else return secondary.
+
+    Based ob https://github.com/albumentations-team/albumentations/blob/master/setup.py to be consistent with their
+     dependency resolution approach.
+    """
+    chosen = secondary
+    for main in mains:
+        try:
+            name = re.split(r"[!<>=]", main)[0]
+            get_distribution(name)
+            chosen = main
+            break
+        except DistributionNotFound:
+            pass
+
+    return str(chosen)
+
+
+def get_install_requirements(install_requires, choose_install_requires):
+    for mains, secondary in choose_install_requires:
+        install_requires.append(choose_requirement(mains, secondary))
+    return install_requires
 
 
 def load_requirements(filename):
@@ -53,7 +90,7 @@ setup(
     python_requires=REQUIRES_PYTHON,
     url=URL,
     packages=find_packages(exclude=("tests",)),
-    install_requires=load_requirements("requirements.txt"),
+    install_requires=get_install_requirements(INSTALL_REQUIRES, CHOOSE_INSTALL_REQUIRES),
     include_package_data=True,
     classifiers=[
         "Programming Language :: Python",
