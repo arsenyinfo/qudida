@@ -1,5 +1,7 @@
 # QuDiDA (QUick and DIrty Domain Adaptation)
 
+[![Upload release to PyPI](https://github.com/arsenyinfo/qudida/actions/workflows/upload_to_pypi.yml/badge.svg)](https://github.com/arsenyinfo/qudida/actions/workflows/upload_to_pypi.yml)
+
 QuDiDA is a micro library for very naive though quick pixel level image domain adaptation via `scikit-learn` transformers.
 Is assumed to be used as image augmentation technique, while was not tested in public benchmarks. 
 
