@@ -92,6 +92,7 @@ setup(
     packages=find_packages(exclude=("tests",)),
     install_requires=get_install_requirements(INSTALL_REQUIRES, CHOOSE_INSTALL_REQUIRES),
     include_package_data=True,
+    license="MIT",
     classifiers=[
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
