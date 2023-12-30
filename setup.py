@@ -9,7 +9,7 @@ from setuptools import find_packages, setup
 NAME = "qudida"
 DESCRIPTION = "QUick and DIrty Domain Adaptation"
 URL = "https://github.com/arsenyinfo/qudida"
-REQUIRES_PYTHON = ">=3.5.0"
+REQUIRES_PYTHON = ">=3.7"
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 INSTALL_REQUIRES = ["numpy>=0.18.0", "scikit-learn>=0.19.1", "typing-extensions"]
@@ -27,7 +27,7 @@ def choose_requirement(mains, secondary):
     """If some version version of main requirement installed, return main,
     else return secondary.
 
-    Based ob https://github.com/albumentations-team/albumentations/blob/master/setup.py to be consistent with their
+    Based on https://github.com/albumentations-team/albumentations/blob/master/setup.py to be consistent with their
      dependency resolution approach.
     """
     chosen = secondary
@@ -89,16 +89,26 @@ setup(
     ],
     python_requires=REQUIRES_PYTHON,
     url=URL,
-    packages=find_packages(exclude=("tests",)),
+    packages=find_packages(exclude=("tests","assets")),
     install_requires=get_install_requirements(INSTALL_REQUIRES, CHOOSE_INSTALL_REQUIRES),
     include_package_data=True,
     license="MIT",
     classifiers=[
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Intended Audience :: Developers",
+        "Intended Audience :: Education",
+        "Intended Audience :: Science/Research",
+        "Topic :: Software Development",
+        "Topic :: Scientific/Engineering",
+        "Topic :: Scientific/Engineering :: Image Processing"
     ],
 )
